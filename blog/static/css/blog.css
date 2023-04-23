@@ -31,6 +31,11 @@ h1, h2, h3, h4 {
     color: #828282;
 }
 
+.author {
+    color: #828282;
+    font-family: 'Lobster', cursive;
+}
+
 .save {
     float: right;
 }
@@ -47,7 +52,11 @@ h1, h2, h3, h4 {
 }
 
 .post {
-    margin-bottom: 70px;
+    margin-bottom: 10px;
+    padding: 12px;
+    background-color: #ffe9bd;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.16);
 }
 
 .post h1 a, .post h1 a:visited {
