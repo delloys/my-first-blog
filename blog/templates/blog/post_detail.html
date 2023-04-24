@@ -6,9 +6,9 @@
 
         <div class="card-body">
                 <h5 class="card-title">{{ post.title }}</h5>
-            <div class="d-lg-inline-flex">
+            <div class="">
                 {% if post.published_date %}
-                  <div class="d-flex align-items-start flex-column">
+                  <div class="">
                       <div class="mb-auto p-2">
                       <h6 class="card-subtitle mb-2 text-muted">
                       {{ post.published_date }},{{ post.author}}
@@ -17,17 +17,18 @@
                   </div>
                  {% endif %}
             {% if user.is_authenticated and user.get_username == post.author.username %}
-                <div class="d-flex align-items-end flex-column">
-                    <div class="mb-auto p-2">
-                        <a class="btn btn-outline-primary me-2" href="{% url 'post_edit' pk=post.pk %}">Изменить</a>
+                    <div class="float-end">
+                        <p class="align-bottom">
+                            <a class="btn btn-outline-primary me-2" href="{% url 'post_edit' pk=post.pk %}">Изменить</a>
+                            <a class="btn btn-outline-primary me-2" href="{% url 'post_delete' pk=post.pk %}">Удалить</a>
+                        </p>
                     </div>
-                </div>
                 {% endif %}
 
+                <div class="">
+                    <p class="card-text">{{ post.text|linebreaksbr }}</p>
+                </div>
             </div>
-
-
-            <p class="card-text">{{ post.text|linebreaksbr }}</p>
         </div>
         <ul class="list-group list-group-flush">
         {% with comments.count as total_comments %}

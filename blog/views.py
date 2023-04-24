@@ -14,6 +14,11 @@ def post_list(request):
         dict[posts[i].title] =len(posts[i].comments.filter(active=True))
     return render(request, 'blog/post_list.html', {'posts': posts,'dict_comm': dict})
 
+def post_delete(request,pk):
+    Post.objects.filter(pk=pk).delete()
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request,'blog/post_list.html', {'posts': posts})
+
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     # Список активных комментариев к этой записи
