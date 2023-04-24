@@ -1,16 +1,67 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
+    <div class="container w-50">
+    <div class="card">
+
+        <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+            <div class="d-lg-inline-flex">
+                {% if post.published_date %}
+                  <div class="d-flex align-items-start flex-column">
+                      <div class="mb-auto p-2">
+                      <h6 class="card-subtitle mb-2 text-muted">
+                      {{ post.published_date }},{{ post.author}}
+                      </h6>
+                      </div>
+                  </div>
+                 {% endif %}
+            {% if user.is_authenticated and user.get_username == post.author.username %}
+                <div class="d-flex align-items-end flex-column">
+                    <div class="mb-auto p-2">
+                        <a class="btn btn-outline-primary me-2" href="{% url 'post_edit' pk=post.pk %}">Изменить</a>
+                    </div>
+                </div>
+                {% endif %}
+
             </div>
+
+
+            <p class="card-text">{{ post.text|linebreaksbr }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+        {% with comments.count as total_comments %}
+          <h6>
+            <li class="list-group-item">{{ total_comments }} comment{{ total_comments|pluralize }}</li>
+          </h6>
+        {% endwith %}
+
+        {% for comment in comments %}
+          <li class="list-group-item">
+            <p>
+              <i>Comment {{ forloop.counter }} by</i><b> {{ comment.name }}</b><i>, {{ comment.created }}</i>
+            </p>
+          {{ comment.body|linebreaks }}
+          </li>
+        {% empty %}
+          <li class="list-group-item">
+            <p>There are no comments yet.</p>
+          </li>
+        {% endfor %}
+        </ul>
+
+        <div class="card-body">
+        {% if new_comment %}
+          <h4>Your comment has been added.</h4>
+        {% else %}
+          <h4>Add a new comment</h4>
+          <form action="." method="post">
+            {{ comment_form.as_p}}
+            {% csrf_token %}
+            <p><input class="btn btn-primary" type="submit" value="Add comment"></p>
+          </form>
         {% endif %}
-        {% if user.is_authenticated %}
-             <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        {% endif %}
-        <h1>{{ post.title }}</h1>
-        <p>{{ post.text|linebreaksbr }}</p>
+        </div>
+    </div>
     </div>
 {% endblock %}
