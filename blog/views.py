@@ -1,22 +1,38 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Post, UserProfile, Comment
-from .forms import PostForm,CommentForm
+from .models import Post, Comment, Profile, User
+from .forms import PostForm,CommentForm, ProfileForm, UserForm
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
 def profile_edit(request,pk):
-    profile_info = get_object_or_404(UserProfile, pk=pk)
-    info_about_user = request.user
-    return render(request,'blog/profile_edit.html', {'profile_info':profile_info,'info': info_about_user})
+    profile_info = get_object_or_404(Profile, pk=pk)
+    user_info = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        # Комментарий был опубликован
+        profile_form = ProfileForm(request.POST, request.FILES)
+        user_form = UserForm(data=request.POST)
+        if profile_form.is_valid():
+            update_profile = profile_form.save(commit=False)
+            update_profile.user_id = request.user.id
+            update_profile.save()
+        if user_form.is_valid():
+            user_info.first_name = user_form.cleaned_data['first_name']
+            user_info.last_name = user_form.cleaned_data['last_name']
+            user_info.email = user_form.cleaned_data['email']
+            user_info.save()
+        return redirect('profile_detail', pk=pk)
+    else:
+        profile_form = ProfileForm(initial={'status':profile_info.status})
+        user_form = UserForm(initial={'first_name':profile_info.user.first_name,'last_name':profile_info.user.last_name,'email':profile_info.user.email})
+    return render(request,'blog/profile_edit.html', {'profile_info':profile_info,'profile_form':profile_form, 'user_form':user_form})
 
-def profile_detail(request):
-    info_about_user = request.user
-    profile_info = get_object_or_404(UserProfile, pk=request.user.id)
+def profile_detail(request,pk):
+    profile_info = get_object_or_404(Profile, pk=pk)
     posts = Post.objects.filter(author=request.user.id)
-    return render(request,'blog/profile_detail.html', {'info': info_about_user,'posts':posts, 'profile_info':profile_info})
+    return render(request,'blog/profile_detail.html', {'profile_info': profile_info,'posts':posts})
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')

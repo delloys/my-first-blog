@@ -11,7 +11,7 @@
                   <div class="">
                       <div class="mb-auto p-2">
                       <h6 class="card-subtitle mb-2 text-muted">
-                      {{ post.published_date }},{{ post.author}}
+                      {{ post.published_date }},<a class="text-decoration-none" href="{% url 'profile_detail' pk=post.author.id %}">{{ post.author}}</a>
                       </h6>
                       </div>
                   </div>

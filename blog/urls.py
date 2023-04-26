@@ -11,8 +11,8 @@ urlpatterns = [
     path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls'), name='signup'),
-    path('profile/', views.profile_detail, name='profile_detail'),
-    path('profile/edit/<int:pk>/', views.profile_edit, name='profile_edit')
+    path('profile/detail/<int:pk>/', views.profile_detail, name='profile_detail'),
+    path('profile/edit/<int:pk>/', views.profile_edit, name='profile_edit'),
 ]
 
 if settings.DEBUG:

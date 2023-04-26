@@ -8,40 +8,34 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+<div class="container w-50">
+         <h1>Настройки профиля</h1>
+</div>
+
 <div class="container w-70">
     <div class="row">
         <div class="col-md-4 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">{{info.username}}</span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                {% if profile_info.photo %}
+                    <img src="{{profile_info.photo.url}}" alt="avatar"
+                      class="rounded-circle img-fluid" style="width: 150px;">
+                    {% else %}
+                    <img src="/blog/images/blog/images/3.jpg" alt="avatar"
+                      class="rounded-circle img-fluid" style="width: 150px;">
+                    {% endif %}
+                <span class="font-weight-bold">{{profile_info.user.username}}</span></div>
         </div>
         <div class="col-md-6 border-right">
             <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Имя</label><input type="text" class="form-control" placeholder="Имя" value={{info.firstname}}></div>
-                    <div class="col-md-6"><label class="labels">Фамилия</label><input type="text" class="form-control" value="{{info.lastname}}" placeholder="Фамилия"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" placeholder="enter phone number" value="{{info.username}}"></div>
-                    <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="enter address line 1" value="{{info.email}}"></div>
-                    <div class="col-md-12"><label class="labels">Статус</label><input type="text" class="form-control" placeholder="enter address line 2" value="{{profile_info.status}}"></div>
-                    <form>
-                      <div class="mb-3">
-                          <label for="formFile" class="form-label">Фото профиля</label>
-                          <input class="form-control" type="file" id="formFile">
-                        </div>
-                    </form>
-                </div>
-                <div class="mt-5 text-center"><a href="{% url 'profile_detail' %}" class="btn btn-primary profile-button" type="button">Сохранить изменения</a></div>
+                <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+                    {{ user_form.as_p }}
+                    {{ profile_form.as_p }}
+                    <button type="submit" class="btn btn-primary profile-button">Save</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<form method="POST" class="post-form">{% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
 {% endblock %}
 </body>
 </html>

@@ -20,7 +20,7 @@
                 <li><a href="/" class="nav-link px-2 link-primary">meowmeow blok</a></li>
                   {% if user.is_authenticated %}
                     <li><a href="{% url 'post_new' %}" class="nav-link px-2 link-primary">Новый пост</a> </li>
-                    <li><a href="{% url 'profile_detail' %}" class="nav-link px-2 link-secondary">Hi, <b>{{ user.username }}</b>!</a></li>
+                    <li><a href="{% url 'profile_detail' pk=user.pk %}" class="nav-link px-2 link-secondary">Hi, <b>{{ user.username }}</b>!</a></li>
                   {% endif %}
               </ul>
 

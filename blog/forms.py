@@ -1,13 +1,25 @@
 from django import forms
 
-from .models import Post, Comment, UserProfile
+from .models import Post, Comment, Profile, User
 
-class UserProfileForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+class ProfileForm(forms.ModelForm):
 
     class Meta:
-        model = UserProfile
-        fields = ('__all__')
-
+        model = Profile
+        fields=('status','photo')
+        widgets = {
+            'status': forms.TextInput(attrs={'class': 'form-control','title':'статус'})
+        }
 class PostForm(forms.ModelForm):
 
     class Meta:
