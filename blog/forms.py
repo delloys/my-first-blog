@@ -1,7 +1,12 @@
 from django import forms
 
-from .models import Post
-from .models import Comment
+from .models import Post, Comment, UserProfile
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ('__all__')
 
 class PostForm(forms.ModelForm):
 

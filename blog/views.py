@@ -1,11 +1,22 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Post
+from .models import Post, UserProfile, Comment
 from .forms import PostForm,CommentForm
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
 
 # Create your views here.
+
+def profile_edit(request,pk):
+    profile_info = get_object_or_404(UserProfile, pk=pk)
+    info_about_user = request.user
+    return render(request,'blog/profile_edit.html', {'profile_info':profile_info,'info': info_about_user})
+
+def profile_detail(request):
+    info_about_user = request.user
+    profile_info = get_object_or_404(UserProfile, pk=request.user.id)
+    posts = Post.objects.filter(author=request.user.id)
+    return render(request,'blog/profile_detail.html', {'info': info_about_user,'posts':posts, 'profile_info':profile_info})
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')

@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -9,4 +11,10 @@ urlpatterns = [
     path('post/<int:pk>/delete/', views.post_delete, name='post_delete'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls'), name='signup'),
+    path('profile/', views.profile_detail, name='profile_detail'),
+    path('profile/edit/<int:pk>/', views.profile_edit, name='profile_edit')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
